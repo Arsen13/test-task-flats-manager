@@ -31,7 +31,7 @@ const findAll = async (req, res) => {
 
         res.status(201).json(flats);
     } catch (error) {
-        console.error("Error in 'createFlat' controller:", error.message);
+        console.error("Error in 'findAll' controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -50,7 +50,7 @@ const findAllPaginated = async (req, res) => {
         res.status(201).json(flats);
 
     } catch (error) {
-        console.error("Error in 'createFlat' controller:", error.message);
+        console.error("Error in 'findAllPaginated' controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -65,6 +65,8 @@ const updateFlat = async (req, res) => {
         }
 
         const flat = await Flat.findById(flatId);
+
+        if (!flat) return res.status(404).json({ error: "Flat not found" });
 
         if (header) flat.header = header;
         if (description) flat.description = description;
@@ -84,9 +86,31 @@ const updateFlat = async (req, res) => {
         res.status(201).json(flat);
 
     } catch (error) {
-        console.error("Error in 'createFlat' controller:", error.message);
+        console.error("Error in 'updateFlat' controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 }
 
-module.exports = { createFlat, findAll, findAllPaginated, updateFlat };
+const deleteFlat = async (req, res) => {
+    try {
+        const {id: flatId} = req.params;
+
+        const flat = await Flat.findById(flatId);
+        if (!flat) return res.status(404).json({ error: "Flat not found" });
+        
+        if (flat.picture) {
+            const publicId = 'flat_pics/' + flat.picture.split('/').pop().split('.')[0];
+            await deleteFromCloudinary(publicId);
+        }
+
+        await Flat.deleteOne({ _id: flat._id });
+
+        return res.status(201).json({ message: "Flat deleted successfully" });
+        
+    } catch (error) {
+        console.error("Error in 'deleteFlat' controller:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+module.exports = { createFlat, findAll, findAllPaginated, updateFlat, deleteFlat };
