@@ -25,4 +25,34 @@ const createFlat = async (req, res) => {
     }
 }
 
-module.exports = createFlat;
+const findAll = async (req, res) => {
+    try {
+        const flats = await Flat.find();
+
+        res.status(201).json(flats);
+    } catch (error) {
+        console.error("Error in 'createFlat' controller:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+const findAllPaginated = async (req, res) => {
+    try {
+        const {page, limit} = req.params;
+
+        if (!page || !limit) return res.status(404).json({ error: "You missed some params" });
+
+        const flats = await Flat
+            .find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.status(201).json(flats);
+
+    } catch (error) {
+        console.error("Error in 'createFlat' controller:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+module.exports = { createFlat, findAll, findAllPaginated };
