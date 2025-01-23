@@ -1,9 +1,9 @@
 const Flat = require('../models/flat.model');
-const { uploadToCloudinary } = require('../utils/fileUpload');
+const { uploadToCloudinary, deleteFromCloudinary } = require('../utils/fileUpload');
 
 const createFlat = async (req, res) => {
     try {
-        const { header, description, price, numberOfRooms, picture } = req.body;
+        const { header, description, price, numberOfRooms } = req.body;
 
         const uploadPicture = await uploadToCloudinary(req.file);
         
@@ -55,4 +55,38 @@ const findAllPaginated = async (req, res) => {
     }
 }
 
-module.exports = { createFlat, findAll, findAllPaginated };
+const updateFlat = async (req, res) => {
+    try {
+        const flatId = req.params.id;
+        const { header, description, price, numberOfRooms } = req.body;
+
+        if (!header && !description && !price && !numberOfRooms && !req.file) {
+            return res.status(400).json({ error: "No changes provided" });
+        }
+
+        const flat = await Flat.findById(flatId);
+
+        if (header) flat.header = header;
+        if (description) flat.description = description;
+        if (price) flat.price = price;
+        if (numberOfRooms) flat.numberOfRooms = numberOfRooms;
+        if (req.file) {
+            if (flat.picture) {
+                const publicId = 'flat_pics/' + flat.picture.split('/').pop().split('.')[0];
+                await deleteFromCloudinary(publicId);
+            }
+            const uploadedImg = await uploadToCloudinary(req.file);
+            flat.picture = uploadedImg.secure_url;
+        }
+
+        await flat.save();
+
+        res.status(201).json(flat);
+
+    } catch (error) {
+        console.error("Error in 'createFlat' controller:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+module.exports = { createFlat, findAll, findAllPaginated, updateFlat };

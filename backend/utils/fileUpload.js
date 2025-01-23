@@ -5,7 +5,7 @@ const storage = multer.memoryStorage();
 
 const uploadToCloudinary = async (file) => {
     return new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream({ folder: "hero_pics" }, (error, result) => {
+        const uploadStream = cloudinary.uploader.upload_stream({ folder: "flat_pics" }, (error, result) => {
             if (error) reject(error);
             resolve(result);
         });
