@@ -1,19 +1,31 @@
 'use client';
 
-import Form from "../components/Form";
+import Form from "../../components/Form";
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { FormFields } from "../types/types";
+import { FormFields } from "../../types/types";
+import { useParams, useRouter } from "next/navigation";
+import { updateFlat } from "@/app/lib/data";
 
 const CreatePage = () => {
     const { 
         register, 
         handleSubmit, 
-        formState: { errors, isSubmitting } 
+        formState: { errors, isSubmitting },
     } = useForm<FormFields>();
 
+    const router = useRouter();
+    const { id } = useParams();
+
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(data)
+        try {
+            if (!id || typeof id !== 'string') {
+                throw new Error("Invalid or missing id");
+            }
+            await updateFlat(data, id);
+            router.push('/');
+        } catch (error) {
+            console.log("Error with update flat", error);
+        }
     }
 
     return (

@@ -3,6 +3,8 @@
 import Form from "../components/Form";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FormFields } from "../types/types";
+import { createFlat } from "../lib/data";
+import { useRouter } from "next/navigation";
 
 const CreatePage = () => {
     const { 
@@ -11,9 +13,15 @@ const CreatePage = () => {
         formState: { errors, isSubmitting } 
     } = useForm<FormFields>();
 
+    const router = useRouter()
+
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(data)
+        try {
+            await createFlat(data);
+            router.push('/');
+        } catch (error) {
+            console.log("Error with create flat", error);
+        }
     }
 
     return (

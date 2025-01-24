@@ -29,11 +29,14 @@ export const flatSlice = createSlice({
         },
         setCountOfPages: (state, action) => {
             state.countOfPages = action.payload;
+        },
+        deleteFlatState: (state, action) => {
+            state.flats = state.flats.filter(flat => flat._id !== action.payload)
         }
     }
 })
 
-export const { fetchFlat, setCurrentPage, setCountOfPages } = flatSlice.actions;
+export const { fetchFlat, setCurrentPage, setCountOfPages, deleteFlatState } = flatSlice.actions;
 
 export default flatSlice.reducer;
 
@@ -45,7 +48,6 @@ export const fetchFlats = (page: number, limit: number) => {
         }
         try {
             const flats = await fetchFlatsApi();
-            console.log(flats);
             dispatch(fetchFlat(flats.flats));
             dispatch(setCountOfPages(Math.ceil(flats.length / limit)));
         } catch (error) {

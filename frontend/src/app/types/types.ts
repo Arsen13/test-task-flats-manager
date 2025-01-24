@@ -3,7 +3,7 @@ export type FormFields = {
     description: string;
     price: number;
     numberOfRooms: number;
-    picture: File;
+    picture: FileList;
 }
 
 export type TFlat = {

@@ -1,8 +1,14 @@
 import { GrUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { TFlat } from "../types/types";
+import { useRouter } from "next/navigation";
+import { deleteFlat } from "../lib/data";
+import { useDispatch } from "react-redux";
 
 const FlatCards = ({ data }: { data: TFlat }) => {
+
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     return (
         <div className="min-h-[500px] w-[400px] p-2 border-none rounded-md bg-amber-300">
@@ -28,8 +34,8 @@ const FlatCards = ({ data }: { data: TFlat }) => {
                     <i>Кількість кімнат: {data.numberOfRooms}</i>
                 </p>
                 <div className="flex gap-2 w-full justify-end items-center pr-3">
-                    <GrUpdate className="w-5 h-5 text-orange-500 cursor-pointer" />
-                    <MdDelete className="w-7 h-7 text-red-600 cursor-pointer" />
+                    <GrUpdate onClick={() => router.push(`/update/${data._id}`)} className="w-5 h-5 text-orange-500 cursor-pointer" />
+                    <MdDelete onClick={() => deleteFlat(data._id, dispatch)} className="w-7 h-7 text-red-600 cursor-pointer" />
                 </div>
             </div>
         </div>
