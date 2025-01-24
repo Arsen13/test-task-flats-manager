@@ -1,4 +1,4 @@
-import FlatCards from "./components/FlatCards";
+import Main from "./components/Main";
 
 export default function Home() {
   return (
@@ -9,9 +9,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
-        <FlatCards />
-      </main>
+      <Main />
     </>
   );
 }

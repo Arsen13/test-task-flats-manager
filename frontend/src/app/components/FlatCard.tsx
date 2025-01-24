@@ -1,29 +1,31 @@
 import { GrUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
+import { TFlat } from "../types/types";
 
-const FlatCards = () => {
+const FlatCards = ({ data }: { data: TFlat }) => {
+
     return (
-        <div className="min-h-[500px] w-[400px] p-2 border-none rounded-md bg-yellow-200">
+        <div className="min-h-[500px] w-[400px] p-2 border-none rounded-md bg-amber-300">
             <div 
-                className="w-full h-[250px]"
+                className="w-full h-[250px] rounded-md"
                 style={{
-                    backgroundImage: `url(https://res.cloudinary.com/dwju9hvfl/image/upload/v1737653776/flat_pics/xcqkzs54bgmwu2jpemvi.jpg)`,
+                    backgroundImage: `url(${data.picture})`,
                     backgroundPosition: 'center center',
                     backgroundSize: "cover",
                 }}
             ></div>
             <div className="flex flex-col gap-1 justify-center items-center mt-2 text-slate-950">
                 <h2 className="text-2xl font-semibold">
-                    Blue Sky
+                    {data.header}
                 </h2>
-                <p className="ml-80 bg-blue-500 pt-1 pb-1 pl-3 pr-3 rounded-full">
-                    2200
+                <p className="ml-80 bg-amber-800 text-white pt-1 pb-1 pl-3 pr-3 rounded-full">
+                    {data.price}
                 </p>
                 <p className="text-sm text-slate-700">
-                    "Sunrise Resort — це затишний курорт, розташований біля берега моря. Готель пропонує просторі номери з видом на океан, басейн, спа та ресторан. На всій території готелю доступний безкоштовний Wi-Fi та приватна парковка
+                    {data.description}
                 </p>
-                <p className="flex w-full justify-start">
-                    Кількість кімнат: 3
+                <p className="flex w-full justify-start text-cyan-700">
+                    <i>Кількість кімнат: {data.numberOfRooms}</i>
                 </p>
                 <div className="flex gap-2 w-full justify-end items-center pr-3">
                     <GrUpdate className="w-5 h-5 text-orange-500 cursor-pointer" />

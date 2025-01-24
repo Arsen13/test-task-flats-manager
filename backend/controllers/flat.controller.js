@@ -47,7 +47,9 @@ const findAllPaginated = async (req, res) => {
             .skip((page - 1) * limit)
             .limit(limit);
 
-        res.status(201).json(flats);
+        const length = await Flat.countDocuments();
+
+        res.status(201).json({flats, length});
 
     } catch (error) {
         console.error("Error in 'findAllPaginated' controller:", error.message);
