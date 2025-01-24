@@ -32,11 +32,17 @@ export const flatSlice = createSlice({
         },
         deleteFlatState: (state, action) => {
             state.flats = state.flats.filter(flat => flat._id !== action.payload)
+        },
+        sortByPrice: (state) => {
+            state.flats = state.flats.sort((a, b) => a.price - b.price);
+        },
+        sortByRooms: (state) => {
+            state.flats = state.flats.sort((a, b) => a.numberOfRooms - b.numberOfRooms);
         }
     }
 })
 
-export const { fetchFlat, setCurrentPage, setCountOfPages, deleteFlatState } = flatSlice.actions;
+export const { fetchFlat, setCurrentPage, setCountOfPages, deleteFlatState, sortByPrice, sortByRooms } = flatSlice.actions;
 
 export default flatSlice.reducer;
 
