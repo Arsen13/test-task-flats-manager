@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { TFlat } from '../types/types';
 import FlatCard from './FlatCard';
 

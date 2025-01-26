@@ -15,7 +15,7 @@ const Main = () => {
 
     useEffect(() => {
         dispatch(fetchFlats(currentPage, flatsPerPage));
-    }, [dispatch, currentPage])
+    }, [dispatch, currentPage, flatsPerPage])
 
     const handlePageChange = (page: number) => {
         dispatch(setCurrentPage(page));
